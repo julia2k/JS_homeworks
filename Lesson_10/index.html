@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 10</title>
+    <style>
+        #text{
+            height:200px;
+            width:200px;
+            background:red;
+            margin:2%;
+        }
+    </style>
+</head>
+<body>
+<form name="form1">
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="surname" placeholder="Surname">
+    <input type="text" name="age" placeholder="Age">
+    <button type="submit">Submit</button>
+</form>
+
+<hr>
+<div>
+    <ul id="showTenObjects"></ul>
+    <button onclick ='clickFunction("p")'>Prev</button>
+    <button onclick ='clickFunction("n")'>Next</button>
+</div>
+<br>
+<hr>
+<div>
+<form name="formAgeCheck">
+    <input type="text" name="age" placeholder="Age">
+    <button type="submit">Submit</button>
+    <h3 id="ageWrap"></h3>
+</form>
+</div>
+<hr>
+
+<form name="tableCreator">
+    <input type="text" name="rows" placeholder="rows">
+    <input type="text" name="columns" placeholder="columns">
+    <input type="text" name="text" placeholder="text">
+    <button type="submit">Submit</button>
+
+</form>
+
+
+<script src="main.js"></script>
+</body>
+</html>
