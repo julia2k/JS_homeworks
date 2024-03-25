@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lesson 11</title>
+    <style>
+        table{
+            width:100%;
+        }
+        tr,th{
+            border:1px solid black;
+
+        }
+
+        table img{
+            width:50px;
+        }
+        #content>div{
+
+            background:lightyellow;
+            margin:3%;
+            padding:2%;
+        }
+#cookBook{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+}
+        #cookBook>div{
+            width:23%;
+            min-width:350px;
+            padding:1%;
+            box-sizing: border-box;
+        }
+        #cookBook img{
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="content"></div>
+<div id="cookBook"></div>
+<script src="main.js"></script>
+</body>
+</html>

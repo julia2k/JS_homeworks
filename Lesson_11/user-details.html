@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+</head>
+<body>
+<h3><a href="users.html">Back</a></h3>
+<script>
+    let userID = new URL(location.href).searchParams.get('id');
+    console.log(userID);
+    let userURL = 'http://jsonplaceholder.typicode.com/users/'+ userID;
+    fetch(userURL).then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            let wrap = document.createElement('div');
+            document.body.appendChild(wrap);
+
+            for (const key in data) {
+                console.log(key, data[key]);
+                let p = document.createElement('p');
+                p.innerText=`${key}: ${data[key]}`;
+
+                if(key === 'company' || key === 'address'){
+                    p.innerText =`${key}:`;
+
+                    let ul = document.createElement('ul');
+                    wrap.append(p,ul);
+                    for (const i in data[key]) {
+                        let li = document.createElement('li');
+
+                        if(i === 'geo'){
+                            li.innerText='geo:';
+                            let innerUL = document.createElement('ul');
+                        li.appendChild(innerUL);
+                            for (const j in data[key][i]){
+                                let innerLi = document.createElement('li');
+                                innerLi.innerText=`${j}: ${data[key][i][j]} `;
+                                innerUL.appendChild(innerLi);
+                            }
+
+                        }else{
+
+                            li.innerText=`${i}: ${data[key][i]} `;
+
+                        }
+                        ul.appendChild(li);
+                    }
+                }else{
+                    wrap.appendChild(p);
+                }
+
+
+            }
+        })
+</script>
+</body>
+</html>
