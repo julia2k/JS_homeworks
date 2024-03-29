@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+    <style>
+        .closed{
+            display:none;
+        }
+        #content{
+            width:90%;
+            margin:2% auto;
+            padding:1%;
+            background:beige;
+            border:1px solid silver;
+            text-transform: capitalize;
+
+        }
+        button{
+            width:90%;
+            text-align:center;
+            font-weight:700;
+            text-transform: uppercase;
+            padding:1em 0;
+            margin:2% auto;
+            display:block;
+            background:orange;
+            cursor:pointer;
+
+        }
+        button:hover{
+            background: darkgoldenrod;
+        }
+        #posts{
+            text-align:center;
+            margin:2% 0;
+
+            padding:2% 0;
+        }
+        #posts a{
+            display:block;
+            line-height:1.5em;
+
+            font-size:1.2em;
+            color:#000000;
+            text-decoration:none;
+
+        }
+        #posts a:hover{
+            color:red;
+        }
+    </style>
+</head>
+<body>
+<h3><a href="index.html">Back</a></h3>
+<script>
+    //
+    //
+    // На странице user-details.html:
+    // 4 Вивести всю, без виключення, інформацію про об'єкт user на який клікнули
+    // 5 Додати кнопку "post of current user", при кліку на яку, з'являються title всіх постів поточного юзера
+    // (для получения постов используйте эндпоинт https://jsonplaceholder.typicode.com/users/USER_ID/posts)
+    //     6 Каждому посту додати кнопку/посилання, при кліку на яку відбувається перехід на сторінку post-details.html,
+    //     котра має детальну інфу про поточний пост.
+    //
+
+    let userID = new URL(location.href).searchParams.get('id');
+    console.log(userID);
+    let userURL = 'http://jsonplaceholder.typicode.com/users/'+ userID;
+    fetch(userURL).then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            let wrap = document.createElement('div');
+            document.body.appendChild(wrap);
+            wrap.setAttribute('id','content');
+            for (const key in data) {
+                console.log(key, data[key]);
+                let p = document.createElement('p');
+                p.innerText=`${key}: ${data[key]}`;
+
+                if(key === 'company' || key === 'address'){
+                    p.innerText =`${key}:`;
+
+                    let ul = document.createElement('ul');
+                    wrap.append(p,ul);
+                    for (const i in data[key]) {
+                        let li = document.createElement('li');
+
+                        if(i === 'geo'){
+                            li.innerText='geo:';
+                            let innerUL = document.createElement('ul');
+                            li.appendChild(innerUL);
+                            for (const j in data[key][i]){
+                                let innerLi = document.createElement('li');
+                                innerLi.innerText=`${j}: ${data[key][i][j]} `;
+                                innerUL.appendChild(innerLi);
+                            }
+
+                        }else{
+
+                            li.innerText=`${i}: ${data[key][i]} `;
+
+                        }
+                        ul.appendChild(li);
+                    }
+                }else{
+                    wrap.appendChild(p);
+                }
+
+
+            }
+            let post_wrap = document.createElement('div');
+            wrap.appendChild(post_wrap);
+            post_wrap.className = 'closed';
+            post_wrap.setAttribute('id','posts');
+
+
+            let postsURL = `https://jsonplaceholder.typicode.com/users/${userID}/posts`
+            console.log(postsURL);
+
+
+            //post_wrap.innerText='hello';
+            let btn = document.createElement('button');
+            btn.setAttribute('id','show_posts');
+            btn.innerText = 'post of current user';
+            btn.addEventListener('click',()=>{
+                //location.href='post-details.html?id='+ userID;
+
+                post_wrap.classList.remove('closed');
+                btn.classList.add('closed');
+                let postsURL = `https://jsonplaceholder.typicode.com/users/${userID}/posts`
+                createPosts(postsURL);
+            })
+            wrap.appendChild(btn);
+        })
+    function createPosts(url){
+        fetch(url)
+            .then(res=>res.json())
+            .then(posts=>{
+                //console.log(posts);
+                let posts_wrap =  document.getElementById('posts');
+                for (const post of posts) {
+                    console.log(post);
+                    let post_item = document.createElement('div');
+                    posts_wrap.appendChild(post_item);
+                    post_item.innerHTML=`
+                    <a href="post-details.html?userid=${userID}&postid=${post.id}">${post.title}</a>
+
+                   `;
+
+
+                }
+                let btn_close_posts = document.createElement('button');
+                btn_close_posts.innerText = 'Close';
+                btn_close_posts.addEventListener('click',()=>{
+
+                    document.getElementById('show_posts').classList.remove('closed');
+                    btn_close_posts.classList.add('closed');
+                    posts_wrap.classList.add('closed');
+                    posts_wrap.innerText='';
+
+
+                })
+                posts_wrap.appendChild(btn_close_posts);
+
+            })
+    }
+</script>
+</body>
+</html>

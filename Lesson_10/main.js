@@ -187,11 +187,27 @@ function functionAdditionalTask(e){
     price = parseInt(storage[storage.length-1]);
     priceWrap.innerText = `${price} grn`;
 
-    console.log(storage[storage.length-1]);
+    //console.log(storage[storage.length-1]);
     storage.push(price + step);
-    setTimeout(() => {
+
+    let time= new Date().getTime();
+
+    let timeToAddToStorage= time + 10000;
+    console.log(time);
+    console.log('timeToAddToStorage -' + timeToAddToStorage);
+    console.log('date now -'+ Date.now());
+    (function () {
+let dateNow=Date.now();
+         while (dateNow < timeToAddToStorage){
+            dateNow = Date.now();
+          //console.log(dateNow);
+        }
         localStorage.setItem('newPrice', JSON.stringify(storage));
-    }, "10000");
+    }());
+
+    // setTimeout(() => {
+    //     localStorage.setItem('newPrice', JSON.stringify(storage));
+    // }, "10000");
 
 
 }

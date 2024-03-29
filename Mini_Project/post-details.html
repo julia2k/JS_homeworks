@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Details</title>
+    <style>
+        #postBody{
+            text-align:center;
+            padding:2%;
+            width:94%;
+            margin:2% auto;
+            border:2px solid silver;
+        }
+        #commentsWrap{
+            display:flex;
+            flex-wrap:wrap;
+            justify-content:space-between;
+        }
+        #commentsWrap>div{
+            width:20%;
+            min-width:250px;
+            border:1px solid black;
+            padding:1%;
+            margin:1%;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+
+
+    //     На странице post-details.html:
+    // 7 Вивести всю, без виключення, інформацію про об'єкт post на який клікнули .
+    // 8 Нижчє інформаці про пост, вивести всі коментарі поточного поста (ендпоінт  - https://jsonplaceholder.typicode.com/posts/POST_ID/comments)
+    //
+    // Стилизація проєкта -
+    // index.html - всі блоки з user - по 2 в рядок. кнопки/аосилвння розташувати під інформацією про user.
+    //     user-details.html - блок з інфою про user зверху сторінки. Кнопка нижчє, на 90% ширини сторінки, по центру.
+    //     блоки з короткою іфною про post - в ряд по 5 .
+    //     post-details.html - блок з інфою про пост зверху. Коментарі - по 4 в ряд.
+    //     Всі елементи котрі характеризують users, posts, comments візуалізувати, так, щоб було видно що це блоки (дати фон. марджини і тд)
+
+    let postID = new URL(location.href).searchParams.get('postid');
+    let userID = new URL(location.href).searchParams.get('userid');
+    console.log(postID);
+    console.log(userID);
+    let postURL = `https://jsonplaceholder.typicode.com/posts/${postID}/comments`;
+    let userURL = `https://jsonplaceholder.typicode.com/users/${userID}/posts`;
+    let wrap = document.createElement('div');
+    wrap.setAttribute('id','wrap');
+    document.body.appendChild(wrap);
+
+    let postBody = document.createElement('div');
+    postBody.setAttribute('id','postBody');
+    wrap.appendChild(postBody);
+
+    let commentsWrap = document.createElement('div');
+    commentsWrap.setAttribute('id','commentsWrap');
+    wrap.appendChild(commentsWrap);
+
+    fetch(userURL).then(res=>res.json())
+        .then(data=>{
+            for (const datum of data) {
+                if (datum.id == postID){
+                    postBody.innerHTML=`
+                    <h1>${datum.title}</h1>
+                    <p>${datum.body}</p>
+                    `;
+                }
+            }
+        })
+
+    fetch(postURL).then(res=>res.json())
+        .then(comments=>{
+            for (const comment of comments) {
+                console.log(comment);
+               let item= document.createElement('div');
+                commentsWrap.appendChild(item);
+               item.innerHTML =`
+               <p>Comment ID : ${comment.id}</p>
+               <h2>Name : ${comment.name}</h2>
+               <h4>Email: ${comment.email}</h4>
+                 <p>${comment.body}</p>
+               `;
+            }
+        })
+
+</script>
+
+</body>
+</html>
